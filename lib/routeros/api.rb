@@ -8,7 +8,7 @@ require_relative "word_stream"
 module RouterOS
   # Main abstraction to connect to RouterOS
   class API
-    VERSION = "0.1.0"
+    VERSION = "0.2.0"
 
     class Error < StandardError; end
 

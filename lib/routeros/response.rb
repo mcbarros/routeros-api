@@ -3,6 +3,9 @@
 module RouterOS
   # Represents a parsed RouterOS response
   class Response
+    KNOWN_NUMBER_FIELDS = %i[scope distance target-scope]
+    KNOWN_BOOLEAN_VALUES = %w[true false]
+
     attr_reader :raw_sentences, :data, :tag
 
     def initialize(sentences)
@@ -58,7 +61,15 @@ module RouterOS
 
     def self.parse_field(word)
       key, value = word[1..].split("=", 2)
-      [key.to_sym, value]
+      key = key.to_sym
+
+      if KNOWN_BOOLEAN_VALUES.include?(value)
+        value = value == "true"
+      elsif KNOWN_NUMBER_FIELDS.include?(key) && !value.nil?
+        value = value.to_i
+      end
+
+      [key, value]
     end
   end
 end

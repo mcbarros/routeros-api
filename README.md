@@ -28,6 +28,7 @@ end
 
 - [ ] SSL support
 - [ ] Async support
+- [ ] Auto deploy and auto changelog
 
 ## Development
 
