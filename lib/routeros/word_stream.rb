@@ -19,6 +19,10 @@ module RouterOS
       @stream.read(read_length)
     end
 
+    def close
+      @stream.close
+    end
+
     # utility to encode the length
     def self.encode_length(length)
       case length
@@ -49,9 +53,14 @@ module RouterOS
 
     private
 
+    def readbyte
+      bytes = @stream.read(1).bytes
+      bytes[0]
+    end
+
     # reads the length from the underlying stream
     def read_length
-      length = @stream.readbyte
+      length = readbyte
       mask = 0xFF
 
       if length & 0x80 == 0x00 # first bit is 0
@@ -66,7 +75,7 @@ module RouterOS
         byte_amount = 4
         mask = 0x1F
       elsif length & 0xF8 == 0xF0 # first, second, third and fourth bits are 1, fifth is 0
-        length = @stream.readbyte
+        length = readbyte
         byte_amount = 3
       end
 
@@ -74,7 +83,7 @@ module RouterOS
 
       (byte_amount - 1).times do
         length <<= 8
-        length += @stream.readbyte
+        length += readbyte
       end
 
       length

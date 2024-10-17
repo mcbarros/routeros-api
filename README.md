@@ -26,7 +26,6 @@ end
 
 ## Planned Features
 
-- [ ] SSL support
 - [ ] Async support
 - [ ] Auto deploy and auto changelog
 

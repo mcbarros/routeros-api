@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "socket"
+require "openssl"
 require_relative "request"
 require_relative "response"
 require_relative "word_stream"
@@ -8,12 +9,23 @@ require_relative "word_stream"
 module RouterOS
   # Main abstraction to connect to RouterOS
   class API
-    VERSION = "0.2.0"
+    VERSION = "0.3.0"
 
     class Error < StandardError; end
 
-    def initialize(host, port)
-      @stream = RouterOS::WordStream.new(TCPSocket.new(host, port))
+    def initialize(host, port, ssl: false, ssl_ctx: nil)
+      raw_socket = TCPSocket.new(host, port)
+
+      if ssl
+        ssl_socket = OpenSSL::SSL::SSLSocket.new(raw_socket, ssl_ctx || OpenSSL::SSL::SSLContext.new)
+        ssl_socket.connect
+        socket = ssl_socket
+      else
+        socket = raw_socket
+      end
+
+      @ssl = ssl
+      @stream = RouterOS::WordStream.new(socket)
       @tag = 0
     end
 
@@ -23,7 +35,12 @@ module RouterOS
     end
 
     def login(name, password)
-      command("/login", { name: name, password: password })
+      warn("non encrypted connection, be careful") unless @ssl
+      command("/login", { name:, password: })
+    end
+
+    def close
+      @stream.close
     end
 
     private
@@ -49,7 +66,7 @@ module RouterOS
 
         response << sentence
 
-        break if sentence.include? "!done"
+        break if sentence.include?("!done")
       end
 
       RouterOS::Response.new(response)

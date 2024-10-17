@@ -3,8 +3,8 @@
 module RouterOS
   # Represents a parsed RouterOS response
   class Response
-    KNOWN_NUMBER_FIELDS = %i[scope distance target-scope]
-    KNOWN_BOOLEAN_VALUES = %w[true false]
+    KNOWN_NUMBER_FIELDS = %i[scope distance target-scope].freeze
+    KNOWN_BOOLEAN_VALUES = %w[true false].freeze
 
     attr_reader :raw_sentences, :data, :tag
 
