@@ -2,6 +2,7 @@
 
 require "socket"
 require "openssl"
+require_relative "async"
 require_relative "request"
 require_relative "response"
 require_relative "word_stream"
@@ -9,7 +10,9 @@ require_relative "word_stream"
 module RouterOS
   # Main abstraction to connect to RouterOS
   class API
-    VERSION = "0.3.0"
+    include RouterOS::Async
+
+    VERSION = "0.4.0"
 
     class Error < StandardError; end
 

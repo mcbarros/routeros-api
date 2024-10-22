@@ -24,10 +24,9 @@ if response.ok?
 end
 ```
 
-## Planned Features
+### Async
 
-- [ ] Async support
-- [ ] Auto deploy and auto changelog
+Async gem is supported but not required, if the gem can be loaded a method `async_command` will be available. Look at the examples folder for a full example.
 
 ## Development
 

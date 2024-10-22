@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+## [0.4.0] - 2024-10-22
+
+- Support `async` gem
+
 ## [0.3.0] - 2024-10-16
 
 - SSL support
